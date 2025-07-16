@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="MapEx: Indoor Structure Exploration with Probabilistic Information Gain from Global Map Predictions">
+  <meta name="keywords" content="MapEx, Exploration, Map Prediction">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MapEx</title>
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-168125787-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-168125787-1');
+  </script>
+  
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.svg">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+  <script type="module" src="https://gradio.s3-us-west-2.amazonaws.com/4.36.1/gradio.js"></script>
+  <style>
+    .line-height-adjust {
+            line-height: 1.1;
+        }
+
+        .button-shadow {
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+    .blockMobile {
+      display: none; /* Hide the component by default */
+    }
+
+    .image-overlay {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateX(30%) translateY(-50%);
+  }
+
+    @media only screen and (min-width: 768px) {
+      .blockMobile {
+        display: block; /* Show the component for screen width 768px and above (desktop) */
+      }
+    }
+
+    .showMobile {
+      display: none; /* Hide the component by default */
+    }
+
+    .bar-image {
+      max-width: 100px;
+      height: auto;
+    }
+
+    @media only screen and (max-width: 768px) {
+      .showMobile {
+        display: block; /* Show the component for screen width 768px and above (desktop) */
+      }
+
+      .image-overlay {
+      position: relative; /* Move the image below the text */
+      top: 0;
+      transform: none; /* Remove vertical centering */
+      margin-top: 20px; /* Space between text and image */
+      margin-right: 0; /* Remove right alignment */
+    }
+
+    .bar-image {
+      display: none;
+    }
+    }
+
+    #dynamic-content {
+  position: relative; /* Ensure the content sections are positioned relative to this container */
+  min-height: 200px; /* Optional: Set a minimum height to prevent collapsing before content is displayed */
+    }
+
+    #dynamic-content .content-section {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
+    }
+
+    #dynamic-content .content-section.active {
+      opacity: 1;
+      visibility: visible;
+      position: relative; /* Allow active content to influence the height of #dynamic-content */
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+    <div class="navbar-menu">
+      <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+        <a class="navbar-item" href="https://mapex-explorer.github.io/">
+          <span class="icon">
+            <i class="fas fa-home"></i>
+          </span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">MapEx: Indoor Structure Exploration with Probabilistic Information Gain from Global Map Predictions</h1>
+            <h3 class="is-size-5 has-text-weight-bold" style="color: orange;">
+              International Conference on Robotics and Automation (ICRA) 2025
+            </h3>
+            <br>
+            <div class="is-size-6 publication-authors">
+              <span class="author-block">
+                <a href="https://cherieho.com/" target="_blank">Cherie Ho</a>*<sup>1</sup>,</span>
+              <span class="author-block">
+                <a href="https://seungchan-kim.github.io" target="_blank">Seungchan Kim</a>*<sup>1</sup>,</span>
+              <span class="author-block">
+                <a href="https://bradymoon.com/" target="_blank">Brady Moon</a><sup>1</sup>,
+              </span>
+              <span class="author-block">
+                <a href="https://www.linkedin.com/in/aditya-parandekar-ab9aa0218/" target="_blank">Aditya Parandekar</a><sup>2</sup>,
+              </span>
+              <span class="author-block">
+                <a href="https://www.linkedin.com/in/narek-harutyunyan-428069233/" target="_blank">Narek Harutyunyan</a><sup>3</sup>,
+              </span>
+              <br>
+              <span class="author-block">
+                <a href="https://sairlab.org/team/chenw/" target="_blank">Chen Wang</a><sup>4</sup>,
+              </span>
+              <span class="author-block">
+                <a href="https://www.cs.cmu.edu/~./katia/" target="_blank">Katia Sycara</a><sup>1</sup>,
+              </span>
+              <span class="author-block">
+                <a href="https://profiles.uts.edu.au/Graeme.Best" target="_blank">Graeme Best</a><sup>5</sup>,
+              </span>
+              <span class="author-block">
+                <a href="https://theairlab.org/team/sebastian/" target="_blank">Sebastian Scherer</a><sup>1</sup>
+              </span>
+            </div>
+
+            <div class="is-size-6 publication-authors">
+              <span class="author-block"><sup>1</sup>Carnegie Mellon University Robotics Institute</span>
+              <br>
+              <span class="author-block"><sup>2</sup>BITS Pilani, Goa Campus</span>
+              <span class="author-block"><sup>3</sup>Brown University</span>
+              <br>
+              <span class="author-block"><sup>4</sup>University at Buffalo</span>
+              <span class="author-block"><sup>5</sup>University of Technology Sydney</span>
+            </div>
+
+            <div class="is-size-6 publication-authors">
+              * Equal Contribution
+            </div>
+
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <!-- PDF Link. -->
+                <span class="link-block">
+                  <a href="https://arxiv.org/pdf/2409.15590" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                    </span>
+                    <span>Paper</span>
+                  </a>
+                </span>
+                <span class="link-block">
+                  <a href="https://arxiv.org/abs/2409.15590" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                    </span>
+                    <span>arXiv</span>
+                  </a>
+                </span>
+                <!-- Code Link. -->
+                <span class="link-block">
+                  <a href="https://github.com/castacks/MapEx"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fab fa-github"></i>
+                    </span>
+                    <span>Code</span>
+                  </a>
+                </span>
+                <!-- Video Link. -->
+                <span class="link-block">
+                  <a href="assets/mapex_video.mp4" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="far fa-images"></i>
+                    </span>
+                    <span>Video</span>
+                  </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="hero abstract_fig">
+    <div class="container is-max-desktop">
+      <!-- <div class="hero-body">
+        <img src="assets/mapex_abstract_fig.jpg" />
+      </div> -->
+        <video id="mapex_fig1_video" autoplay controls muted loop playsinline height="100%">
+          <source src="./assets/mapex_fig1_cartoon_video.mp4" type="video/mp4">
+        </video>
+        <h2 class="subtitle has-text-centered">
+          MapEx is a new exploration framework that uses predicted maps to form <i>probabilistic</i> information gain. Our key insight is to calculate
+          probabilistic information gain that <i>jointly</i> reasons on sensor coverage and uncertainty.
+        </h2>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <!-- Abstract. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Abstract</h2>
+          <div class="content has-text-justified">
+            <p>
+              Exploration is a critical challenge in robotics, centered on understanding unknown environments.
+              In this work, we focus on robots exploring structured indoor environments which are often predictable and composed of repeating patterns.
+              Most existing approaches, such as conventional frontier approaches, have difficulty leveraging the predictability and explore with simple heuristics such as "closest first". 
+              Recent works use deep learning techniques to predict unknown regions of the map, using these predictions for information gain calculation. 
+              However, these approaches are often sensitive to the predicted map quality or do not reason over sensor coverage. 
+              To overcome these issues, our key insight is to jointly reason over what the robot can observe and its uncertainty to calculate probabilistic information gain. 
+              We introduce <b>MapEx</b>, a new exploration framework that uses predicted maps to form probabilistic sensor model for information gain estimation. 
+              MapEx generates multiple predicted maps based on observed information, and takes into consideration both the computed variances of predicted maps and estimated visible area to estimate the information gain of a given viewpoint. 
+              Experiments on the real-world KTH dataset showed on average 12.4% improvement than representative map-prediction based exploration and 25.4% improvement than nearest frontier approach. 
+            </p>
+          </div>
+        </div>
+      </div>
+      <!--/ Abstract. -->
+    </div>
+  </section>
+
+  <section class="hero is-small is-light">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-four-fifths">
+            <h2 class="title is-3">Insight: Jointly reason on prediction uncertainty and sensor coverage </h2>
+            <p>Tl;dr - Predict multiple maps → estimate uncertainty and sensor coverage → explore to build accurate maps faster</p>
+            <div class="buttons is-centered">
+              <button class="button is-primary line-height-adjust button-shadow" onclick="showContent(1,1)">Map Predictions</button>
+              <button class="button is-link button-shadow" onclick="showContent(2,1)">Raycast</button>
+              <button class="button is-info button-shadow" onclick="showContent(3,1)">Visibility Masks</button>
+              <button class="button is-success button-shadow" onclick="showContent(4,1)">Information Gain</button>
+            </div>
+            <div id="dynamic-content">
+              <div class="content-section active" id="content-1-1">
+                <div class="content has-text-justified">
+                  <p>Given the observed occupancy grid maps, our LaMa model predictor can generate reasonable predicted maps that are close to the ground-truth maps. These predictions are used in MapEx for probabilistic raycasting and viewpoint scoring. </p>
+                  <img src="assets/map-prediction-examples.png" alt="Map predictions" />
+                </div>
+              </div>
+              <div class="content-section" id="content-1-2">
+                <div class="content has-text-justified">
+                  <p><strong>Left: </strong>Conventional raycasting using only the observed occupancy grid map tends to overestimate the potential sensor coverage at a given viewpoint. <br>
+                    <strong>Middle: </strong>Deterministic raycasting with a predicted map can address this issue but often terminates rays prematurely if the predictions are inaccurate, leading to an underestimation of the information gain at the viewpoint. <br>
+                    <strong>Right: </strong>To overcome these limitations, we employ probabilistic raycasting on the mean predicted map. Each ray begins with an initial accumulated occupancy value of 0. As the ray traverses through the pixels of the mean predicted map, it incrementally adds the occupancy value of each pixel. Once the accumulated value reaches a predefined threshold, the raycasting process stops. </p>
+                  <img src="assets/raycasts.png" alt="Raycasts" />
+                </div>
+              </div>
+              <div class="content-section" id="content-1-3">
+                <div class="content has-text-justified">
+                  <p> Given ray end points, we perform a flood-fill algorithm to generate a sensor coverage mask, and then mask out already-observed areas from the sensor coverage mask to generate a visibility mask. <br>
+                    Using probabilistic raycasting on the mean predicted maps, we generate a visibility mask that probabilistically represents the unknown area estimated to be visible at each viewpoint. </p>
+                  <img src="assets/visibility-masks.png" alt="Visibility Masks" />
+                </div>
+              </div>
+              <div class="content-section" id="content-1-4">
+                <div class="content has-text-justified">
+                  <p> We model the uncertainty of the predictions, by computing the pixel-wise variance of ensemble of map predictions. </p>
+                  <img src="assets/variance-map.png" alt="Variance Map" />
+                  <p> To compute the information gain at each viewpoint, we use both the visibility mask generated from probabilistic raycast and the variance map. We sum the values of all pixels in the variance map that also fall within the visibility mask. <br> This probabilistic information gain estimates the potential reduction in uncertainty, not just by considering the size of observable area but also the variance it will cover.</p>
+                  <img src="assets/info-gain.png" alt="Info gain" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="hero is-small">
+    <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">MapEx Framework</h2>
+          <div class="content has-text-justified">
+            <img source src="assets/mapex_pipeline.png" />
+            <p>
+              Our exploration approach estimates probabilistic information gain from predicted maps to use in a frontier explorer. First, a robot accumulates its observations into a top-down observed occupancy map which is then passed to an ensemble of map predictors to generate multiple map predictions. For each possible frontier, information gain is calculated from the mean and variance of the predicted maps. Finally, the frontier with the highest reward is chosen as the next goal.
+            </p>
+          </div>
+        </div>
+      </div>
+      </div>
+  </section>
+  
+  <section class="hero is-small is-light">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-four-fifths">
+            <h2 class="title is-3">Results</h2>
+            <div class="buttons is-centered">
+              <button class="button is-primary line-height-adjust button-shadow" onclick="showContent(4,2)">MapEx vs Baselines</button>
+              <button class="button is-link button-shadow" onclick="showContent(5,2)">Frontier Scoring</button>
+              <button class="button is-info button-shadow" onclick="showContent(6,2)">Metrics</button>
+            </div>
+            <div id="dynamic-content">
+              <div class="content-section active" id="content-2-4">
+                <div class="content has-text-justified">
+                  <p>MapEx explores the map best resulting in the most accurate predicted map. In contrast, UPEN which optimizes for
+                    high variance without sensor coverage, searches a limited area. IG-Hector only considers sensor coverage and does
+                    not explore sufficiently at the start due to inadequate map predictions.</p>
+                  <video controls autoplay loop muted width="100%">
+                    <source src="assets/mapex-upen-ighector-video.mp4" type="video/mp4">
+                  </video>
+                </div>
+              </div>
+              <div class="content-section" id="content-2-5">
+                <div class="content has-text-justified">
+                  <p>We show examples of MapEx frontier scoring. MapEx jointly reasons on sensor coverage and uncertainty to guide
+                    predictions. The left image shows a top-scoring frontier with high sensor coverage with medium uncertainty. In
+                    contrast, the right image presents a scenario where MapEx selects a frontier that covers smaller area but has high
+                    uncertainty, rather than the one with higher coverage but less potential for learning.</p>
+                  <img src="assets/frontier-scoring.png" alt="Frontier scoring" />
+                </div>
+              </div>
+              <div class="content-section" id="content-2-6">
+                <div class="content has-text-justified">
+                  <p>MapEx outperforms map prediction-based and nearest exploration planners in terms of Coverage, Predicted IoU, and Topological Understanding metrics.</p>
+                  <img src="assets/Mapex-baselines.png" alt="Metrics" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="hero is-small">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Video</h2>
+          <div class="content has-text-centered">
+            <video controls autoplay loop muted width="100%">
+              <source src="assets/mapex_video.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+      </div>
+  </section>
+
+
+  <section class="hero is-small is-light">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Acknowledgments</h2>
+          <div class="content has-text-centered">
+            <p>
+              We thank Siddarth Narasimhan for sharing a more processed KTH dataset and providing valuable insights into baseline reproduction. 
+              We thank Simon Stepputtis, Yaqi Xie, David Fan and Mononito Goswami for helpful discussions.
+            </p>
+          </div>
+        </div>
+      </div>
+  </section>
+
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <h2 class="title">BibTeX</h2>
+      <pre><code>
+        @article{ho_kim2024mapex,
+          title={MapEx: Indoor Structure Exploration with Probabilistic Information Gain from Global Map Predictions},
+          author={Ho, Cherie and Kim, Seungchan and Moon, Brady and Parandekar, Aditya and Harutyunyan, Narek and Wang, Chen and Sycara, Katia and Best, Graeme and Scherer, Sebastian},
+          journal={arXiv preprint arXiv:2409.15590},
+          year={2024}
+        }
+      </code></pre>
+    </div>
+  </section>
+
+  <style>
+    #blocks {
+        width:100%;
+        height:60px;
+        margin:0 auto;
+    }
+    #block1 {
+        height:33.33%;
+        width:30%;
+        float: left;
+    }
+    #block2 {
+        height:33.33%;
+        width:40%;
+        float: left;
+    }
+    #block3 {
+        height:33.33%;
+        width:30%;
+        float: right;
+    }
+  </style>
+  
+
+
+  <footer class="footer">
+    <div class="container">
+      <div class="content has-text-centered">
+        <a class="icon-link" href="">
+          <i class="fas fa-file-pdf"></i>
+        </a>
+        <a class="icon-link" href="" class="external-link" disabled>
+          <i class="fab fa-github"></i>
+        </a>
+      </div>
+      <div class="columns is-centered">
+        <div class="column is-8">
+          <div class="content">
+            <p>
+              This website is adapted from the Nerfies template, which is licensed under a <a rel="license"
+                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+                Commons Attribution-ShareAlike 4.0 International License</a>.
+            </p>
+            <p>
+              If you use the <a href="https://github.com/MapItAnywhere/MapItAnywhere.github.io">source code</a> of this
+              website, please also link back to the <a href="https://github.com/nerfies/nerfies.github.io">Nerfies
+                source code</a> in your footer.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+<script>
+  function showContent(option,section) {
+      // Remove the active class from all sections
+      // const parentContainer = document.getElementById(`dynamic-content-${section}`);
+
+      const button = event.target;
+      const parentContainer = button.closest(".hero");
+
+      // Remove the active class from all content sections within this container
+      const sections = parentContainer.querySelectorAll(".content-section");
+      sections.forEach(contentSection => {
+        contentSection.classList.remove("active");
+      });
+
+      // Add the active class to the selected section
+      const selectedSection = document.getElementById(`content-${section}-${option}`);
+      if (selectedSection) {
+        selectedSection.classList.add("active");
+      }
+    }
+</script>
+
+</body>
+
+</html>
