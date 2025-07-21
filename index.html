@@ -270,45 +270,54 @@
       <div class="container is-max-desktop">
         <div class="columns is-centered has-text-centered">
           <div class="column is-four-fifths">
-            <h2 class="title is-3">Insight: Jointly reason on prediction uncertainty and sensor coverage </h2>
-            <p>Tl;dr - Predict multiple maps → estimate uncertainty and sensor coverage → explore to build accurate maps faster</p>
-            <div class="buttons is-centered">
-              <button class="button is-primary line-height-adjust button-shadow" onclick="showContent(1,1)">Map Predictions</button>
-              <button class="button is-link button-shadow" onclick="showContent(2,1)">Raycast</button>
-              <button class="button is-info button-shadow" onclick="showContent(3,1)">Visibility Masks</button>
-              <button class="button is-success button-shadow" onclick="showContent(4,1)">Information Gain</button>
-            </div>
-            <div id="dynamic-content">
+            <h2 class="title is-3">Insight1: Fast computation of pathwise sensor coverage</h2>
+            <p>The core component of PIPE planner is to estimate information gain of each frontier, by integrating <b>cumulative sensor coverage</b> (estimated by raycasts) along each path. But this is computationally expensive. How do we compute the cumulative information gain efficiently?</p>
+            <img src="assets/vis-mask-generation.gif" alt="insight-1" />
+            <p>Rather than performing a flood fill operation seprately for each raycast-generated polygon and then taking the union of the visibility masks, 
+              we first merge the raycast-generated polygons into one and apply a single flood fill operation to the merged polygon. 
+              We leverage computational geometry to address union of multiple nonconvex raycasted polygons (trapped regions or holes).
+            </p>
+            <!-- <div class="buttons is-centered">
+              <button class="button is-primary line-height-adjust button-shadow" onclick="showContent(1,1)">Visibility Masks</button>
+              <button class="button is-link button-shadow" onclick="showContent(2,1)">Insight2</button>
+              <button class="button is-success button-shadow" onclick="showContent(3,1)">Insight 3</button>
+            </div> -->
+            <!-- <div id="dynamic-content">
               <div class="content-section active" id="content-1-1">
                 <div class="content has-text-justified">
-                  <p>Given the observed occupancy grid maps, our LaMa model predictor can generate reasonable predicted maps that are close to the ground-truth maps. These predictions are used in MapEx for probabilistic raycasting and viewpoint scoring. </p>
-                  <img src="assets/map-prediction-examples.png" alt="Map predictions" />
+                  <p>insight 1 text </p>
+                  
                 </div>
               </div>
               <div class="content-section" id="content-1-2">
                 <div class="content has-text-justified">
-                  <p><strong>Left: </strong>Conventional raycasting using only the observed occupancy grid map tends to overestimate the potential sensor coverage at a given viewpoint. <br>
-                    <strong>Middle: </strong>Deterministic raycasting with a predicted map can address this issue but often terminates rays prematurely if the predictions are inaccurate, leading to an underestimation of the information gain at the viewpoint. <br>
-                    <strong>Right: </strong>To overcome these limitations, we employ probabilistic raycasting on the mean predicted map. Each ray begins with an initial accumulated occupancy value of 0. As the ray traverses through the pixels of the mean predicted map, it incrementally adds the occupancy value of each pixel. Once the accumulated value reaches a predefined threshold, the raycasting process stops. </p>
-                  <img src="assets/raycasts.png" alt="Raycasts" />
+                  <p>Text here</p>
+                  <img src="" alt="vis-mask" />
                 </div>
               </div>
               <div class="content-section" id="content-1-3">
                 <div class="content has-text-justified">
-                  <p> Given ray end points, we perform a flood-fill algorithm to generate a sensor coverage mask, and then mask out already-observed areas from the sensor coverage mask to generate a visibility mask. <br>
-                    Using probabilistic raycasting on the mean predicted maps, we generate a visibility mask that probabilistically represents the unknown area estimated to be visible at each viewpoint. </p>
-                  <img src="assets/visibility-masks.png" alt="Visibility Masks" />
+                  <p>insight 3 </p>
+                  <img src="" alt="insight-3" />
                 </div>
               </div>
-              <div class="content-section" id="content-1-4">
-                <div class="content has-text-justified">
-                  <p> We model the uncertainty of the predictions, by computing the pixel-wise variance of ensemble of map predictions. </p>
-                  <img src="assets/variance-map.png" alt="Variance Map" />
-                  <p> To compute the information gain at each viewpoint, we use both the visibility mask generated from probabilistic raycast and the variance map. We sum the values of all pixels in the variance map that also fall within the visibility mask. <br> This probabilistic information gain estimates the potential reduction in uncertainty, not just by considering the size of observable area but also the variance it will cover.</p>
-                  <img src="assets/info-gain.png" alt="Info gain" />
-                </div>
-              </div>
-            </div>
+            </div> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="hero is-small is-light">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-four-fifths">
+            <h2 class="title is-3">Insight2: Mitigate overestimation using map predictions</h2>
+            <p>text here</p>
+            <img src="assets/fig7.png" alt="insight-1" />
+            <p> text here2
+            </p>
           </div>
         </div>
       </div>
@@ -320,11 +329,14 @@
     <div class="container is-max-desktop">
       <div class="columns is-centered has-text-centered">
         <div class="column is-four-fifths">
-          <h2 class="title is-3">MapEx Framework</h2>
+          <h2 class="title is-3">PIPE Planner Overview</h2>
           <div class="content has-text-justified">
-            <img source src="assets/mapex_pipeline.png" />
+            <img source src="assets/pipe-overview.png" />
             <p>
-              Our exploration approach estimates probabilistic information gain from predicted maps to use in a frontier explorer. First, a robot accumulates its observations into a top-down observed occupancy map which is then passed to an ensemble of map predictors to generate multiple map predictions. For each possible frontier, information gain is calculated from the mean and variance of the predicted maps. Finally, the frontier with the highest reward is chosen as the next goal.
+              The robot extracts frontiers from its observed occupancy grid map and generates predicted maps. 
+              For each frontier, PIPE estimates path-integrated sensor coverage and generates a visibility mask for the full path. 
+              It computes pathwise information gain by summing the pixelwise variance of predictions within the visibility mask. 
+              The robot then selects the frontier with the highest information gain for exploration planning.
             </p>
           </div>
         </div>
@@ -339,34 +351,20 @@
           <div class="column is-four-fifths">
             <h2 class="title is-3">Results</h2>
             <div class="buttons is-centered">
-              <button class="button is-primary line-height-adjust button-shadow" onclick="showContent(4,2)">MapEx vs Baselines</button>
-              <button class="button is-link button-shadow" onclick="showContent(5,2)">Frontier Scoring</button>
-              <button class="button is-info button-shadow" onclick="showContent(6,2)">Metrics</button>
+              <button class="button is-primary line-height-adjust button-shadow" onclick="showContent(4,2)">Behavior Comparison</button>
+              <button class="button is-link button-shadow" onclick="showContent(5,2)">Metrics</button>
             </div>
             <div id="dynamic-content">
               <div class="content-section active" id="content-2-4">
                 <div class="content has-text-justified">
-                  <p>MapEx explores the map best resulting in the most accurate predicted map. In contrast, UPEN which optimizes for
-                    high variance without sensor coverage, searches a limited area. IG-Hector only considers sensor coverage and does
-                    not explore sufficiently at the start due to inadequate map predictions.</p>
-                  <video controls autoplay loop muted width="100%">
-                    <source src="assets/mapex-upen-ighector-video.mp4" type="video/mp4">
-                  </video>
+                  <p>text here1</p>
+                  <img src="assets/behavior-comparison.png" alt="Behavior Comparison" />
                 </div>
               </div>
               <div class="content-section" id="content-2-5">
                 <div class="content has-text-justified">
-                  <p>We show examples of MapEx frontier scoring. MapEx jointly reasons on sensor coverage and uncertainty to guide
-                    predictions. The left image shows a top-scoring frontier with high sensor coverage with medium uncertainty. In
-                    contrast, the right image presents a scenario where MapEx selects a frontier that covers smaller area but has high
-                    uncertainty, rather than the one with higher coverage but less potential for learning.</p>
-                  <img src="assets/frontier-scoring.png" alt="Frontier scoring" />
-                </div>
-              </div>
-              <div class="content-section" id="content-2-6">
-                <div class="content has-text-justified">
-                  <p>MapEx outperforms map prediction-based and nearest exploration planners in terms of Coverage, Predicted IoU, and Topological Understanding metrics.</p>
-                  <img src="assets/Mapex-baselines.png" alt="Metrics" />
+                  <p>text here2</p>
+                  <img src="assets/fig6_02.png" alt="Metrics" />
                 </div>
               </div>
             </div>
