@@ -7,6 +7,7 @@
   <meta name="keywords" content="Exploration, Map Prediction">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>PIPE Planner</title>
+  <link rel="icon" type="image/x-icon" href="static/images/favicon.ico">
 
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-168125787-1"></script>
   <script>
@@ -132,13 +133,13 @@
       </a>
     </div>
     <div class="navbar-menu">
-      <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+      <!-- <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
         <a class="navbar-item" href="https://pipe-planner.github.io/">
           <span class="icon">
             <i class="fas fa-home"></i>
           </span>
         </a>
-      </div>
+      </div> -->
     </div>
   </nav>
 
@@ -447,34 +448,59 @@
   
 
 
-  <footer class="footer">
-    <div class="container">
-      <div class="content has-text-centered">
-        <a class="icon-link" href="">
-          <i class="fas fa-file-pdf"></i>
-        </a>
-        <a class="icon-link" href="" class="external-link" disabled>
-          <i class="fab fa-github"></i>
-        </a>
-      </div>
-      <div class="columns is-centered">
-        <div class="column is-8">
-          <div class="content">
-            <p>
-              This website is adapted from the Nerfies template, which is licensed under a <a rel="license"
-                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
-                Commons Attribution-ShareAlike 4.0 International License</a>.
+
+<footer class="footer">
+  <div class="container">
+      <div id="blocks">
+        <div id="block1">
+          <a href="https://theairlab.org/">
+            <img src="static/images/Horizontal@2x.png" alt="AirLab Logo" style="width:60%;">
+          </a>
+        </div>
+        <div id="block2">
+          <center>
+            <a class="button is-text" itemprop="linkedin" href="https://www.linkedin.com/company/10629296/admin/feed/posts/" target="_blank">
+              <i class="fab fa-linkedin fa-lg" style="height:100%;"></i>
+            </a>
+            <a class="button is-text" itemprop="facebook" href="https://bsky.app/profile/airlabcmu.bsky.social" target="_blank">
+              <img src="static/images/Bluesky_Logo.svg" alt="AirLab Logo" style="height:90%; filter: grayscale(90%);">
+            </a>
+            <a class="button is-text" itemprop="twitter" href="https://www.twitter.com/airlabcmu/" target="_blank">
+              <i class="fab fa-twitter fa-lg"></i>
+            </a>
+            <a class="button is-text" itemprop="medium" href="https://medium.com/airlabcmu" target="_blank">
+              <i class="fab fa-medium fa-lg"></i>
+            </a>
+            <a class="button is-text" itemprop="github" href="https://github.com/castacks" target="_blank">
+              <i class="fab fa-github fa-lg"></i>
+            </a>
+            <br>
+            <br>
+            <p class="" style="font-size: .65rem;">This webpage was adapted from the 
+              <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a> 
+                template, which is licensed under a 
+                <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>. 
+                <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
+                  <img alt="Creative Commons License" style="border-width:0; height: 0.65rem;" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" />
+                </a>
             </p>
-            <p>
-              If you use the <a href="https://github.com/MapItAnywhere/MapItAnywhere.github.io">source code</a> of this
-              website, please also link back to the <a href="https://github.com/nerfies/nerfies.github.io">Nerfies
-                source code</a> in your footer.
+            <p class="" style="font-size: .65rem;">If you use the <a href="https://github.com/ia-tigris/ia-tigris.github.io">source code</a> of this webpage,
+              please link back to this page in the footer.
             </p>
-          </div>
+            <!-- <p>
+              This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a> which was adopted from the <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
+              You are free to borrow the source code of this website, we just ask that you link back to this page in the footer.
+            </p> -->
+          </center>
+        </div>
+        <div id="block3">
+          <a href="https://www.ri.cmu.edu/">
+            <img src="static/images/riLogo2019.svg" alt="RI Logo" style="float: right;">
+          </a>
         </div>
       </div>
-    </div>
-  </footer>
+  </div>
+</footer>
 
 <script>
   function showContent(option,section) {
