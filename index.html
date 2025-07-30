@@ -119,6 +119,44 @@
       position: relative; /* Allow active content to influence the height of #dynamic-content */
     }
 
+
+    /* Dropdown content styling */
+    .dropdown-content {
+      text-align: left !important;
+    }
+
+    .dropdown-item {
+      text-align: left !important;
+    }
+
+    /* Button alignment fix */
+    .publication-links .link-block {
+      display: inline-block;
+      vertical-align: middle;
+      margin: 0 2px;
+    }
+
+    .publication-links .link-block .button,
+    .publication-links .link-block .dropdown-trigger .button {
+      height: 2.5em !important;
+      min-height: 2.5em !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      vertical-align: middle !important;
+    }
+
+    .dropdown {
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    /* Fix dropdown button alignment */
+    .dropdown-trigger .button {
+      height: 2.5em !important; /* Match height of other buttons */
+      align-items: center;
+      display: inline-flex !important;
+    }
+
   </style>
 </head>
 
@@ -221,6 +259,33 @@
                     </span>
                     <span>Video</span>
                   </a>
+                </span>
+                <!-- Related Works Dropdown -->
+                <span class="link-block">
+                  <div class="dropdown is-hoverable">
+                    <div class="dropdown-trigger">
+                      <button class="button is-normal is-rounded is-dark" aria-haspopup="true" aria-controls="dropdown-menu">
+                        <span class="icon">
+                          <i class="fas fa-link"></i>
+                        </span>
+                        <span>Related Research</span>
+                        <span class="icon is-small">
+                          <i class="fas fa-angle-down" aria-hidden="true"></i>
+                        </span>
+                      </button>
+                    </div>
+                    <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                      <div class="dropdown-content">
+                        <a href="https://mapex-explorer.github.io" class="dropdown-item" target="_blank">
+                          MapEx Explorer
+                        </a>
+                        <a href="http://arxiv.org/abs/2503.01548" class="dropdown-item" target="_blank">
+                          MapExRL
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </span>
               </div>
             </div>
           </div>
